@@ -16,5 +16,5 @@ public class type_general : MonoBehaviour {
 
 public enum type
 {
-	red=0,green=1,blue=2,yellow=3,magenta=4,cyan=5,none=6
+	red=0,yellow=1,blue=2
 }
