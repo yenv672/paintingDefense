@@ -68,7 +68,7 @@ public class controller_Painting : MonoBehaviour {
 
 	public void EndDrawing(){
 		if (startDrawing) {
-			thisTurnLine.GetComponent<type_line> ().donePainting = true;
+//			thisTurnLine.GetComponent<type_line> ().donePainting = true;
 			thisTurnLine = null;
 			count = 0;
 			startDrawing = false;

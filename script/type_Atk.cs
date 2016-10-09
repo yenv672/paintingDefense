@@ -27,11 +27,17 @@ public class type_Atk : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector3 lookAtHere = new Vector3 (playerPosition.position.x,transform.position.y,playerPosition.position.z);
-		transform.LookAt (playerPosition.position);
+		transform.LookAt (lookAtHere);
 	}
 
 	IEnumerator behaviour(){
-		yield return new WaitForSeconds (myInfo.startAfterSec);
+		if (underAttack != null) {
+			StopCoroutine (underAttack);
+			underAttack = null;
+		} else {
+			yield return new WaitForSeconds (myInfo.startAfterSec);
+		}
+
 		while (true) {
 			preAtk ();
 			yield return new WaitForSeconds (myInfo.hitWaitSec);
@@ -92,7 +98,7 @@ public class type_Atk : MonoBehaviour {
 		yield return new WaitForSeconds (1);
 		agent.speed = myInfo.speed;
 		behaviourCor = StartCoroutine (behaviour());
-		StopCoroutine (underAttack);
+
 	}
 
 	public void Die(){

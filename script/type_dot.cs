@@ -16,8 +16,11 @@ public class type_dot : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider who){
+//		print (who.name);
 		if (who.tag == "enemy") {
+//			print ("here");
 			type_Atk atkType = who.GetComponent<type_Atk> ();
+			if (atkType == null) atkType = who.GetComponentInParent<type_Atk> ();
 			if (atkType.atkType == myType) {
 				who.SendMessage ("hurt", SendMessageOptions.DontRequireReceiver);
 			} else {

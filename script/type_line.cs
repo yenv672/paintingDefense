@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class type_line : MonoBehaviour {
 
 	public List<GameObject> dots = new List<GameObject> ();
-	public bool donePainting = false;
+//	public bool donePainting = false;
 
 	// Use this for initialization
 	void Start () {
