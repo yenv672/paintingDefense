@@ -13,6 +13,8 @@ public class type_Atk : MonoBehaviour {
 	public NavMeshAgent agent;
 	public LayerMask hitTHis;
 	public List<Renderer> disappear = new List<Renderer>();
+	public Animator atkAni;
+	float reserve = 0;
 	Material originalMat;
 	Renderer[] childrenRender;
 	Coroutine behaviourCor;
@@ -73,6 +75,7 @@ public class type_Atk : MonoBehaviour {
 	void preAtk(){
 		Ray ray = new Ray (transform.position, transform.forward);
 		RaycastHit rayhit = new RaycastHit ();
+		//atkAni.SetFloat ("speed", 0);
 		if (Physics.Raycast (ray, out rayhit, 1000f, hitTHis)) {
 //			print (rayhit.point);
 //			projectionObj.transform.position = rayhit.point;
@@ -84,12 +87,14 @@ public class type_Atk : MonoBehaviour {
 		Material thisMat = type_general.thisGeneral.findMat (atkType);
 		changeMat (thisMat);
 		preAttackEvent.Invoke ();
+
 	}
 
 	void atk(){
 		attackEvent.Invoke ();
-//		projectionObj.SetActive (false);
 		agent.destination = playerPosition.position;
+//		projectionObj.SetActive (false);
+
 
 	}
 
@@ -129,7 +134,7 @@ public class type_Atk : MonoBehaviour {
 
 	void changeMat(Material Mat){
 		for (int i = 0; i < childrenRender.Length; i++) {
-			childrenRender [i].material = Mat;
+			if(childrenRender [i].material!=dis)childrenRender [i].material = Mat;
 		}
 	}
 
