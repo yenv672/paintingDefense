@@ -6,7 +6,7 @@ public class type_Atk : MonoBehaviour {
 	public enemyInfo myInfo;
 	public Transform playerPosition;
 	public Transform movingPosition;
-	public GameObject projectionObj;
+//	public GameObject projectionObj;
 	public type atkType;
 	public NavMeshAgent agent;
 	public LayerMask hitTHis;
@@ -62,9 +62,9 @@ public class type_Atk : MonoBehaviour {
 		RaycastHit rayhit = new RaycastHit ();
 		if (Physics.Raycast (ray, out rayhit, 1000f, hitTHis)) {
 //			print (rayhit.point);
-			projectionObj.transform.position = rayhit.point;
-			projectionObj.transform.LookAt (playerPosition);
-			projectionObj.SetActive (true);
+//			projectionObj.transform.position = rayhit.point;
+//			projectionObj.transform.LookAt (playerPosition);
+//			projectionObj.SetActive (true);
 			atkType = createInProportion();
 
 		}
@@ -75,7 +75,7 @@ public class type_Atk : MonoBehaviour {
 
 	void atk(){
 		attackEvent.Invoke ();
-		projectionObj.SetActive (false);
+//		projectionObj.SetActive (false);
 		agent.destination = playerPosition.position;
 
 	}
