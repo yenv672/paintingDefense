@@ -18,7 +18,7 @@ public class type_line : MonoBehaviour {
 	}
 
 	public void Die(){
-		print ("here DIE");
+//		print ("here DIE");
 		foreach (GameObject obj in dots) {
 			obj.SetActive (false);
 			obj.transform.SetParent (null);
