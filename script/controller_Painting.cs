@@ -16,7 +16,7 @@ public class controller_Painting : MonoBehaviour {
 	public Renderer[] brushTop;
 	public type_info nowType;
 	public int createInterval = 15; //creat 1 unit evey "A" frame
-
+	Vector3 localSca;
 	GameObject thisTurnLine = null;
 	bool startDrawing = false;
 	int count = 0;
@@ -40,6 +40,7 @@ public class controller_Painting : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//1defaultLineType = nowLineType;
+		localSca = dotPre.transform.localScale;
 		nowType = type_general.thisGeneral.colorSetting[0];
 		changeColor ();
 		ifPaintingReady = true;
@@ -89,8 +90,11 @@ public class controller_Painting : MonoBehaviour {
 		thisTurnLine.SetActive (true);
 		if(!linePool.Contains(thisLine))linePool.Add (thisLine);
 	}
+		
 
 	void lineBuilding(){
+		Vector3 randomRotate = Vector3.up * Random.Range (-360, 360) + Vector3.forward * Random.Range (-360, 360) + Vector3.left * Random.Range (-360, 360);
+		float randomScale = Random.Range (0.1f, 5f);
 		GameObject thisDot = find(DotPool);
 		if (thisDot == null) {
 			thisDot = Instantiate (dotPre, drawFromHere.transform.position, Quaternion.identity,thisTurnLine.transform) as GameObject;
@@ -99,6 +103,8 @@ public class controller_Painting : MonoBehaviour {
 		} else {
 			thisDot.transform.position = drawFromHere.transform.position;
 		}
+		thisDot.transform.Rotate (randomRotate);
+		thisDot.transform.localScale =   localSca*randomScale;
 		thisDot.transform.SetParent (thisTurnLine.transform);
 		thisDot.GetComponent<type_dot>().myType = nowType.mytype;
 		thisDot.GetComponent<Renderer> ().material = nowType.myMat;

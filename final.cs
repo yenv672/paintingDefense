@@ -16,7 +16,12 @@ public class final : StateMachineBehaviour {
 
 //	 OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Debug.Log ("here");
+		Debug.Log ("here"+ animator.speed);
+		if (animator.speed == 1) {
+			animator.speed = -1;
+		} else {
+			animator.speed = 1;
+		}
 		animation_turnOnTurnOff.thisOnOff.change ();
 	}
 

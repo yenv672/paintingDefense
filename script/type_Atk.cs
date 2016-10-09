@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Events;
 public class type_Atk : MonoBehaviour {
 
+	public Material dis;
 	public enemyInfo myInfo;
 	public Transform playerPosition;
 	public Transform movingPosition;
@@ -10,10 +12,12 @@ public class type_Atk : MonoBehaviour {
 	public type atkType;
 	public NavMeshAgent agent;
 	public LayerMask hitTHis;
+	public List<Renderer> disappear = new List<Renderer>();
 	Material originalMat;
 	Renderer[] childrenRender;
 	Coroutine behaviourCor;
 	Coroutine underAttack;
+	int lastNum = 0;
 
 	[System.Serializable]
 	public class MyEventType : UnityEvent { }
@@ -22,13 +26,20 @@ public class type_Atk : MonoBehaviour {
 	public MyEventType attackEvent;
 	public MyEventType dieEvent;
 
+	void OnAwake(){
+		
+	}
+
 	// Use this for initialization
 	void Start () {
 		childrenRender = GetComponentsInChildren<Renderer> ();
+		for (int i = 0; i < childrenRender.Length; i++) {
+			disappear.Add (childrenRender [i]);
+		}
+		originalMat = GetComponentsInChildren<Renderer> () [0].material;
 		myInfo = new enemyInfo (controller_enableSituation.thisSit.level_assign[controller_enableSituation.thisSit.nowLevel].thisLevelEnemyInfo);
 		agent.speed = myInfo.speed;
 		behaviourCor = StartCoroutine (behaviour());
-		originalMat = GetComponentsInChildren<Renderer> () [0].material;
 		changeMat (originalMat);
 	}
 	
@@ -52,6 +63,8 @@ public class type_Atk : MonoBehaviour {
 			atk ();
 			yield return new WaitForSeconds (5);
 			move ();
+			yield return new WaitForSeconds (2);
+			changeMat (originalMat);
 			yield return new WaitForSeconds (myInfo.hitInterval);
 
 		}
@@ -81,15 +94,22 @@ public class type_Atk : MonoBehaviour {
 	}
 
 	void move(){
-		changeMat (originalMat);
 		agent.destination = movingPosition.position;
 	}
 
 	public void hurt(){
 		if (underAttack == null) {
 			hurtEvent.Invoke ();
-			print ("hurt");
+			print ("hurt"+lastNum);
 			myInfo.healthPoint -= 1;
+			int temp = lastNum;
+			for (int i = lastNum; i < disappear.Count; i++) {
+				if (lastNum - temp > 10) {
+				} else {
+					lastNum++;
+					disappear [i].material= dis;
+				}
+			}
 			if (myInfo.healthPoint < 0) Die ();
 			StopCoroutine (behaviourCor);
 			underAttack = StartCoroutine (escape ());
