@@ -82,6 +82,8 @@ public class controller_Painting : MonoBehaviour {
 			thisLine = Instantiate (linePre, drawFromHere.transform.position, Quaternion.identity) as GameObject;
 			thisLine.name = "line " + linePool.Count;
 
+		} else {
+			thisLine.transform.position = drawFromHere.transform.position;
 		}
 		thisTurnLine = thisLine;
 		thisTurnLine.SetActive (true);

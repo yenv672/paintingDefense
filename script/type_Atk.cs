@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.Events;
 public class type_Atk : MonoBehaviour {
 
 	public enemyInfo myInfo;
@@ -14,6 +14,13 @@ public class type_Atk : MonoBehaviour {
 	Renderer[] childrenRender;
 	Coroutine behaviourCor;
 	Coroutine underAttack;
+
+	[System.Serializable]
+	public class MyEventType : UnityEvent { }
+	public MyEventType hurtEvent;
+	public MyEventType preAttackEvent;
+	public MyEventType attackEvent;
+	public MyEventType dieEvent;
 
 	// Use this for initialization
 	void Start () {
@@ -58,34 +65,31 @@ public class type_Atk : MonoBehaviour {
 			projectionObj.transform.LookAt (playerPosition);
 			projectionObj.SetActive (true);
 			atkType = createInProportion();
-			Material thisMat = type_general.thisGeneral.findMat (atkType);
-			for (int i = 0; i < childrenRender.Length; i++) {
-				childrenRender [i].material = thisMat;
-			}
+
 		}
+		Material thisMat = type_general.thisGeneral.findMat (atkType);
+		changeMat (thisMat);
+		preAttackEvent.Invoke ();
 	}
 
 	void atk(){
+		attackEvent.Invoke ();
 		projectionObj.SetActive (false);
 		agent.destination = playerPosition.position;
 
 	}
 
 	void move(){
-		for (int i = 0; i < childrenRender.Length; i++) {
-			childrenRender [i].material = originalMat;
-		}
+		changeMat (originalMat);
 		agent.destination = movingPosition.position;
 	}
 
 	public void hurt(){
 		if (underAttack == null) {
+			hurtEvent.Invoke ();
 			print ("hurt");
 			myInfo.healthPoint -= 1;
 			if (myInfo.healthPoint < 0) Die ();
-			for (int i = 0; i < childrenRender.Length; i++) {
-				childrenRender [i].material = originalMat;
-			}
 			StopCoroutine (behaviourCor);
 			underAttack = StartCoroutine (escape ());
 		}
@@ -95,13 +99,21 @@ public class type_Atk : MonoBehaviour {
 		print ("escape");
 		agent.speed = myInfo.speed * 1.5f;
 		agent.destination = movingPosition.position;
+		changeMat (originalMat);
 		yield return new WaitForSeconds (1);
 		agent.speed = myInfo.speed;
 		behaviourCor = StartCoroutine (behaviour());
 
 	}
 
+	void changeMat(Material Mat){
+		for (int i = 0; i < childrenRender.Length; i++) {
+			childrenRender [i].material = Mat;
+		}
+	}
+
 	public void Die(){
+		dieEvent.Invoke ();
 		print ("enemy DIE");
 	}
 
