@@ -29,6 +29,7 @@ public class type_Atk : MonoBehaviour {
 		agent.speed = myInfo.speed;
 		behaviourCor = StartCoroutine (behaviour());
 		originalMat = GetComponentsInChildren<Renderer> () [0].material;
+		changeMat (originalMat);
 	}
 	
 	// Update is called once per frame
